@@ -28,13 +28,13 @@ endif(COMMAND cmake_policy)
 
 
 # define plugin name, owner and versions
-set(VERBOSE_NAME "Media Player Control")
-set(COMMON_NAME "Media Player Control")
-set(TITLE_NAME "MEDIAPLAYERCONTROL")
+set(VERBOSE_NAME "Fusion Media Player")
+set(COMMON_NAME "Fusion Media Player")
+set(TITLE_NAME "FUSIONMEDIAPLAYER")
 set(PACKAGE_CONTACT "twocanplugin@hotmail.com")
-set(PACKAGE "media_player_control")
-set(SHORT_DESCRIPTION "Media Player Control, remote control for Fusion media players")
-set(LONG_DESCRIPTION "Media Player Control, remote control for Fusion media players") 
+set(PACKAGE "fusion_media_player")
+set(SHORT_DESCRIPTION "Fusion Media Player, a remote control for Fusion media players")
+set(LONG_DESCRIPTION "Fusion Media Player, a remote control that uses the TwoCan plugin to communicate over NMEA 2000 networks with Fusion media players") 
 set(VERSION_MAJOR "1")
 set(VERSION_MINOR "0")
 set(VERSION_PATCH "0")
@@ -57,7 +57,7 @@ set(ALPHA "alpha") # Standard Repos
 
 set(CLOUDSMITH_USER "steven-adler")
 # set this if your cloudsmith repository name does not match your git repository name 
-set(CLOUDSMITH_BASE_REPOSITORY "racingplugin")
+set(CLOUDSMITH_BASE_REPOSITORY "fusionmedia")
 
 set(XML_INFO_URL "")
 set(XML_SUMMARY ${SHORT_DESCRIPTION})
@@ -70,7 +70,7 @@ set(XML_DESCRIPTION ${LONG_DESCRIPTION})
 ## Uses SVG graphics for the toolbar icons
 option(PLUGIN_USE_SVG "Use SVG graphics" ON)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 
 # Prefer libGL.so to libOpenGL.so, see CMP0072
 set(OpenGL_GL_PREFERENCE "LEGACY")
@@ -94,7 +94,9 @@ message(STATUS "${CMLOC}Build type: ${CMAKE_BUILD_TYPE}")
 
 project(${PACKAGE})
 
-include("cmake/PluginSetup.cmake")
+set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake;")
+
+include("PluginSetup")
 
 ##
 ## ----- Modify section below if there are special requirements for the plugin ----- ##
@@ -109,16 +111,16 @@ option(Plugin_CXX11 "Use c++11" OFF)
 ## ----- do not change next section - needed to configure build process ----- ##
 ##
 
-include("cmake/PluginConfigure.cmake")
+include("PluginConfigure")
 
 ##
 ## ----- Change below to match project requirements for source, headers, etc. ----- ##
 ##
 
-## Media Player Control does not understand/use this definition
+## Fusion Media Player does not understand/use this definition
 ##add_definitions(-DUSE_S57)
 
-##Media Player Control uses SVG for toolbar icons
+##Fusion Media Player uses SVG for toolbar icons
 add_definitions(-DPLUGIN_USE_SVG)
 
 ## JSON used for plugin messaging
@@ -129,27 +131,33 @@ else(APPLE)
 endif(APPLE)
 
 ## Need following for ocpn_plugin.h
-include_directories(BEFORE ${PROJECT_SOURCE_DIR}libs/ocpn-api)
+INCLUDE_DIRECTORIES(BEFORE ${PROJECT_SOURCE_DIR}libs/ocpn-api)
+## Need following for wxJSON
+INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/inc ${PROJECT_SOURCE_DIR}/libs/wxJSON/include)
 
-INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/inc ${CMAKE_SOURCE_DIR}/src)
+SET(SOURCES src/mediaplayer_icon.cpp
+            src/mediaplayer_plugin.cpp
+            src/mediaplayer_dialog.cpp
+            src/mediaplayer_dialogbase.cpp)
 
-SET(SOURCES src/mediaplayercontrol_icon.cpp
-            src/mediaplayercontrol_plugin.cpp
-            src/mediaplayercontrol_window.cpp
-            src/mediaplayercontrol_windowbase.cpp)
+SET(HEADERS inc/mediaplayer_icon.h
+            inc/mediaplayer_plugin.h
+            inc/mediaplayer_dialog.h
+            inc/mediaplayer_dialogbase.h)
 
-SET(HEADERS inc/mediaplayercontrol_icon.h
-            inc/mediaplayercontrol_plugin.h
-            inc/mediaplayercontrol_window.h
-            inc/mediaplayercontrol_windowbase.h)
+SET(JSON
+    libs/wxJSON/src/jsonval.cpp
+    libs/wxJSON/src/jsonreader.cpp
+    libs/wxJSON/src/jsonwriter.cpp
+)
 
-TARGET_SOURCES(${PACKAGE_NAME} PUBLIC ${SOURCES})
+TARGET_SOURCES(${PACKAGE_NAME} PUBLIC ${SOURCES} ${JSON})
 
 ##
 ## ----- do not change next section - needed to configure build process ----- ##
 ##
 
-include("cmake/PluginInstall.cmake")
-include("cmake/PluginLocalization.cmake")
-include("cmake/PluginPackage.cmake")
+include("PluginInstall")
+include("PluginLocalization")
+include("PluginPackage")
 

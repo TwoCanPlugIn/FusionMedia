@@ -57,8 +57,6 @@
 // Media Player Control Dialog
 #include "mediaplayer_dialog.h"
 
-
-
 // Plugin receives events from the Media Player Control Window
 const wxEventType wxEVT_MEDIAPLAYER_DIALOG_EVENT = wxNewEventType();
 const int MEDIAPLAYER_ON = wxID_HIGHEST + 1;

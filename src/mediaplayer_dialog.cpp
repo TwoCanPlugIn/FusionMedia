@@ -215,10 +215,15 @@ void MediaPlayerDialog::OnSelectedV1(wxTreeEvent& event) {
 				// if it was, currentItem = previous item)
 				if (previousItem != mediaTreeList->GetRootItem()) {
 					wxString relPath;
+#if (defined (__APPLE__) && defined (__MACH__))
+					std::experimental::filesystem::path a = previousItemData->GetItemPath().ToStdString();
+					std::experimental::filesystem::path b = currentItemData->GetItemPath().ToStdString();
+					relPath = std::experimental::filesystem::relative(b, a).generic_string();
+#else
 					std::filesystem::path a = previousItemData->GetItemPath().ToStdString();
 					std::filesystem::path b = currentItemData->GetItemPath().ToStdString();
 					relPath = std::filesystem::relative(b, a).generic_string();
-
+#endif
 					// To process relative path
 					wxString token;
 					wxStringTokenizer tokenizer(relPath, "/");

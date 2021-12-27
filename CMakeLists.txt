@@ -120,7 +120,7 @@ include("PluginConfigure")
 ## Fusion Media Player does not understand/use this definition
 ##add_definitions(-DUSE_S57)
 
-##Fusion Media Player uses SVG for toolbar icons
+## Fusion Media Player uses SVG for toolbar icons
 add_definitions(-DPLUGIN_USE_SVG)
 
 ## JSON used for plugin messaging
@@ -131,19 +131,17 @@ else(APPLE)
 endif(APPLE)
 
 ## Need following for ocpn_plugin.h
-INCLUDE_DIRECTORIES(BEFORE ${PROJECT_SOURCE_DIR}libs/ocpn-api)
+INCLUDE_DIRECTORIES(BEFORE ${CMAKE_SOURCE_DIR}/libs/ocpn-api)
 ## Need following for wxJSON
-INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/inc ${PROJECT_SOURCE_DIR}/libs/wxJSON/include)
+INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/libs/wxJSON/include)
+## And the project include dirs
+INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/inc)
 
 SET(SOURCES src/mediaplayer_icon.cpp
             src/mediaplayer_plugin.cpp
             src/mediaplayer_dialog.cpp
             src/mediaplayer_dialogbase.cpp)
 
-SET(HEADERS inc/mediaplayer_icon.h
-            inc/mediaplayer_plugin.h
-            inc/mediaplayer_dialog.h
-            inc/mediaplayer_dialogbase.h)
 
 SET(JSON
     libs/wxJSON/src/jsonval.cpp

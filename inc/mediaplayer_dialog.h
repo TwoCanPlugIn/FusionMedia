@@ -26,8 +26,12 @@
 // not sure where an unordered map is used
 #include <unordered_map>
 // To determine relative paths
+#if (defined (__APPLE__) && defined (__MACH__))
+#include <experimental/filesystem>
+#else
 #include <filesystem>
-namespace fs = std::filesystem;
+#endif
+//namespace fs = std::filesystem;
 
 extern bool mediaPlayerControlPanelVisible;
 extern bool isMuted;

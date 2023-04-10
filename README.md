@@ -45,11 +45,7 @@ Creating an installation package
 
 Installation
 ------------
-Run the resulting setup package created above for your platform.
-
-Eg. For Windows run racing\_pi\_1.0.0-ov50.exe
-
-For OpenCPN version 5.2 and later, this version may be installed directly by the OpenCPN Plugin Manager.
+Install directly from the OpenCPN Plugin Manager.
 
 Problems
 --------
